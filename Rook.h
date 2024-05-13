@@ -1,20 +1,23 @@
-#pragma once
-#ifndef ROOK_H
-#define ROOK_H
+
+#ifndef CROOK_H
+#define CROOK_H
+
 #include "Piece.h"
 
-class Rook  {
-private:	
-	bool team = true;
+class Rook : public piece {
+private:
+	int team = 1;
 public:
-	vector <int> possiblemovelocation; 
-	Rook();
-	void move() {
-		
+	vector <bool> possiblemoves;
+
+	Rook(int type, int pieceTeam) {
+		possiblemoves.resize(64, false);
+		pieceInt = type;
+		team = pieceTeam;
+	}
+	vector<bool>  move(vector<piece> map) {
+
 	}
 };
 
-Rook::Rook() {
-	int pieceInt = 1;
-}
 #endif

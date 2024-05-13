@@ -1,4 +1,3 @@
-#pragma once
 
 #ifndef ABOARD_H
 #define ABOARD_H
@@ -17,6 +16,11 @@ using namespace std;
 #include "ACursor.h"
 #include "Piece.h"
 #include "Rook.h"
+#include "Queen.h"
+#include "Knight.h"
+#include "King.h"
+#include "Pawn.h"
+#include "Bishop.h"
 #include <random>
 /*
 todo:
@@ -87,13 +91,13 @@ public:
 		// restricts cursor to only move in indexes that align with the possible moves vector
 		// if space is pressed, if the cursor location has not changed, "let go" of the piece
 		//else, move the piece to new location
-		static int currentPieceLocation = myCursor.get_c_location();
+		int currentPieceLocation = myCursor.get_c_location();
 		int nextPieceLocation;
 		//wcout << "CPL" << currentPieceLocation << endl;
 
 		do {
 			//myBoard.draw();
-			this_thread::sleep_for(chrono::milliseconds(1));
+			this_thread::sleep_for(chrono::milliseconds(100));
 
 			if (GetAsyncKeyState(VK_DOWN)) {
 				move_down();
@@ -111,17 +115,14 @@ public:
 			}
 			else if (GetAsyncKeyState(VK_SPACE)) {
 				nextPieceLocation = myCursor.get_c_location();
-				//wcout << "CPL" << currentPieceLocation << endl;
-				//wcout << "NPL" << nextPieceLocation << endl;
 				pressed = true;
-				if (nextPieceLocation != currentPieceLocation) {
- 					map.at(nextPieceLocation) = map.at(currentPieceLocation);
-					map.at(currentPieceLocation).pieceInt = 0;
+				if (map.at(currentPieceLocation).move().at(nextPieceLocation)) {
+					map.at(nextPieceLocation) = map.at(currentPieceLocation);
+						map.at(currentPieceLocation).pieceInt = 0;
 				}
-				
 			}
-			
-		} while (!pressed);
+				
+		}while (!pressed);
 
 	}
 	void draw( ) {
@@ -196,12 +197,12 @@ board::board(int sizeX, int sizeY) {
 	vectorX = sizeX;
 	vectorY = sizeY;
 	absoluteSize = sizeX * sizeY;
-	map.resize(absoluteSize, piece());
+	map.resize(absoluteSize/2 , piece());
 	ShowConsoleCursor(false);
-	map.insert(map.begin(), { piece(1, 1), piece(2, 1),piece(3, 1), piece(4, 1), piece(5, 1), piece(3, 1),piece(2, 1), piece(1, 1) });
-	map.insert(map.begin() + 8, { piece(6, 1), piece(6, 1),piece(6, 1), piece(6, 1), piece(6, 1), piece(6, 1),piece(6, 1), piece(6, 1) });
-	map.insert(map.begin() + 48, { piece(6, 1), piece(6, 1),piece(6, 1), piece(6, 1), piece(6, 1), piece(6, 1),piece(6, 1), piece(6, 1) });
-	map.insert(map.begin() + 56, { piece(1, 1), piece(2, 1),piece(3, 1), piece(4, 1), piece(5, 1), piece(3, 1),piece(2, 1), piece(1, 1) });
+	map.insert(map.begin(), { Rook(1, 1), Knight(2, 1), Bishop(3, 1), King(4, 1), Queen(5, 1), Bishop(3, 1), Knight(2, 1), Rook(1, 1) });
+	map.insert(map.begin() + 8, { Pawn(6, 1), Pawn(6, 1),Pawn(6, 1), Pawn(6, 1), Pawn(6, 1), Pawn(6, 1),Pawn(6, 1), Pawn(6, 1) });
+	map.insert(map.begin() + 48, { Pawn(6, -1), Pawn(6, -1),Pawn(6, -1), Pawn(6,-1), Pawn(6, -1), Pawn(6, -1), Pawn(6, -1), Pawn(6, -1) });
+	map.insert(map.begin() + 56, { Rook(1, -1), Knight(2, -1), Bishop(3, -1), King(4, -1), Queen(5, -1), Bishop(3, -1), Knight(2, -1), Rook(1, -1) });
 }
 
 #endif

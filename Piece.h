@@ -1,8 +1,7 @@
-﻿#pragma once
+﻿
 #ifndef PIECE_H
 #define PIECE_H
 #include "ACursor.h"
-#include "Rook.h"
 #include <vector>
 #include <string>
 
@@ -12,16 +11,16 @@ using namespace std;
 class piece : public cursor{
 private:
 	int location = 0;
-	int team = 0;
-	vector <int> possibleMoves;
-	string pieceName = " ";
+	
+	//string pieceName = " ";
 
     //const char WHITE = 0xDB;
     //const char BLACK = 0xFF;
 public:
+	int team = 1;
 	int pieceInt = 0;
-	virtual void move(){
-
+	virtual vector<bool> move(){
+		return  vector<bool>(64);
 	}
     char figure = ' ';
     bool color = true;
@@ -40,10 +39,10 @@ public:
 			else if (pieceInt == 3) {
 				figure = 'B';
 			}
-			else if (pieceInt == 4) {
+			else if (pieceInt == 5) {
 				figure = 'Q';
 			}
-			else if (pieceInt == 5) {
+			else if (pieceInt == 4) {
 				figure = 'K';
 			}
 			else if (pieceInt == 6) {

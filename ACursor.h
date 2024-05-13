@@ -1,4 +1,3 @@
-#pragma once
 #ifndef CURSOR_H
 #define CURSOR_H
 #include <iostream>
