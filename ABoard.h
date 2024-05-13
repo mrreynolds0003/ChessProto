@@ -28,7 +28,7 @@ const int SIZEX = 8;
 const int SIZEY = 8;
 const int WHITE = 240;
 const int BLACK = 7;
-
+//extern vector <piece> map;
 class board {
 private:
 	int vectorX;
@@ -80,7 +80,50 @@ public:
 		x = pos % vectorX;
 		y = pos / vectorX;
 	}
-	
+	void identifyMoves(bool pressed) { 
+		//identify which was clicked map.at(cursorlocation)
+		// send the map to the piece class in question
+		// gets back a vector of possible moves
+		// restricts cursor to only move in indexes that align with the possible moves vector
+		// if space is pressed, if the cursor location has not changed, "let go" of the piece
+		//else, move the piece to new location
+		static int currentPieceLocation = myCursor.get_c_location();
+		int nextPieceLocation;
+		//wcout << "CPL" << currentPieceLocation << endl;
+
+		do {
+			//myBoard.draw();
+			this_thread::sleep_for(chrono::milliseconds(1));
+
+			if (GetAsyncKeyState(VK_DOWN)) {
+				move_down();
+			}
+			else if (GetAsyncKeyState(VK_UP)) {
+				move_up();
+
+			}
+			else if (GetAsyncKeyState(VK_RIGHT)) {
+				move_right();
+
+			}
+			else if (GetAsyncKeyState(VK_LEFT)) {
+				move_left();
+			}
+			else if (GetAsyncKeyState(VK_SPACE)) {
+				nextPieceLocation = myCursor.get_c_location();
+				//wcout << "CPL" << currentPieceLocation << endl;
+				//wcout << "NPL" << nextPieceLocation << endl;
+				pressed = true;
+				if (nextPieceLocation != currentPieceLocation) {
+ 					map.at(nextPieceLocation) = map.at(currentPieceLocation);
+					map.at(currentPieceLocation).pieceInt = 0;
+				}
+				
+			}
+			
+		} while (!pressed);
+
+	}
 	void draw( ) {
 		secure.lock();
 		gotoxy(0, 0);

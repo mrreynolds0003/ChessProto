@@ -7,8 +7,11 @@ class Rook  {
 private:	
 	bool team = true;
 public:
+	vector <int> possiblemovelocation; 
 	Rook();
-	
+	void move() {
+		
+	}
 };
 
 Rook::Rook() {

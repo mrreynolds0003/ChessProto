@@ -59,8 +59,16 @@ int main()
 		else if (GetAsyncKeyState(VK_LEFT)) {
 			myBoard.move_left();
 		}
-		else if (GetAsyncKeyState(VK_SPACE)) {
-
+		else if (GetAsyncKeyState(VK_SPACE)) { 
+			bool pressed = true;
+			myBoard.identifyMoves(pressed);
+			//Note: store peice selection, wich will remain the same, until they move or exit move state by pressing space on other square
+			//Cases:
+			//	Move Piece valid
+			//	Exit by pressing space on select piece
+			//Call Board Function to show avaiable with cursor location
+				//In board move, waiting for cursor to move, and select new location
+				//Unless they press space on non valid LOC,we are in move state
 		}
 		else if (GetAsyncKeyState(0x4D)) {
 
