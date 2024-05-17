@@ -10,7 +10,7 @@ private:
 
 
 public:
-	vector<bool> move(vector<Piece*>& map, int loc) {
+	vector<bool> move(vector<Piece*>& map, int loc, int newloc) {
 		possiblemoves.clear();
 		possiblemoves.resize(64, false);
 		if (abs(map.at(loc + ((vectorX)*team))->team) == 0) {			// verifies nothing is there

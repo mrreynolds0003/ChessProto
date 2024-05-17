@@ -11,7 +11,7 @@ using namespace std;
 class Piece : public cursor{
 private:
 	int location = 0;
-	
+	int vectorX = 8;
 	//string pieceName = " ";
 
     //const char WHITE = 0xDB;
@@ -21,8 +21,10 @@ public:
 	int team;
 	int pieceInt = 0;
 	vector <bool> possiblemoves;
-	virtual vector<bool> move(vector<Piece*>& map, int loc) {
-		return  possiblemoves;
+	virtual vector<bool> move(vector<Piece*>& map, int loc, int newloc) {
+			possiblemoves.clear();
+			possiblemoves.resize(64, false);
+				return possiblemoves;
 	}
     char figure = ' ';
     bool color = true;
@@ -35,13 +37,13 @@ public:
 			}
 			return temp;
 	}
+
 };
 Piece::Piece() {
-	pieceInt = 0;
 	team = 0;
 }
 Piece::Piece(int pieceTeam) {
-	pieceInt = 0;
+	possiblemoves.resize(64, false);
 	team = pieceTeam;
 }
 #endif

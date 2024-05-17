@@ -61,6 +61,7 @@ int main()
 		}
 		else if (GetAsyncKeyState(VK_SPACE)) { 
 			bool pressed = false;
+			
 			myBoard.identifyMoves(pressed);// location
 			//Note: store peice selection, wich will remain the same, until they move or exit move state by pressing space on other square
 			//Cases:
@@ -85,6 +86,6 @@ int main()
 	clock.join();
 	thread_obj.join();
         
-        //SetConsoleTextAttribute(console_color, 17);
+    //SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 
 }
