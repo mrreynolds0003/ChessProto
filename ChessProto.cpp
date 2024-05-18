@@ -60,8 +60,9 @@ int main()
 			myBoard.move_left();
 		}
 		else if (GetAsyncKeyState(VK_SPACE)) { 
-			bool pressed = true;
-			myBoard.identifyMoves(pressed);
+			bool pressed = false;
+			
+			myBoard.identifyMoves(pressed);// location
 			//Note: store peice selection, wich will remain the same, until they move or exit move state by pressing space on other square
 			//Cases:
 			//	Move Piece valid
@@ -76,15 +77,15 @@ int main()
 		}
 		if (GetAsyncKeyState(VK_ESCAPE)) {
 			game_running = false;
-			myBoard.game_over = true;
-		};
+ 			myBoard.game_over = true;
+ 		};
 	} while (game_running);
 	
 	myBoard.clock();
-	//myBoard.draw();
+	myBoard.draw();
 	clock.join();
 	thread_obj.join();
         
-        //SetConsoleTextAttribute(console_color, 17);
+    //SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 
 }

@@ -1,4 +1,3 @@
-#pragma once
 
 #ifndef ABOARD_H
 #define ABOARD_H
@@ -17,6 +16,11 @@ using namespace std;
 #include "ACursor.h"
 #include "Piece.h"
 #include "Rook.h"
+#include "Queen.h"
+#include "Knight.h"
+#include "King.h"
+#include "Pawn.h"
+#include "Bishop.h"
 #include <random>
 /*
 todo:
@@ -55,7 +59,7 @@ private:
 	}
 public:
 	bool game_over = false;
-	vector <piece> map;
+	vector <Piece*> map;
 	cursor myCursor;
 	board(int sizeX, int sizeY);
 	void clock() {
@@ -87,13 +91,15 @@ public:
 		// restricts cursor to only move in indexes that align with the possible moves vector
 		// if space is pressed, if the cursor location has not changed, "let go" of the piece
 		//else, move the piece to new location
-		static int currentPieceLocation = myCursor.get_c_location();
+		int currPieceLoc = myCursor.get_c_location();
 		int nextPieceLocation;
+		int index = 0;
 		//wcout << "CPL" << currentPieceLocation << endl;
 
 		do {
+			index++;
 			//myBoard.draw();
-			this_thread::sleep_for(chrono::milliseconds(1));
+			this_thread::sleep_for(chrono::milliseconds(100));
 
 			if (GetAsyncKeyState(VK_DOWN)) {
 				move_down();
@@ -111,17 +117,17 @@ public:
 			}
 			else if (GetAsyncKeyState(VK_SPACE)) {
 				nextPieceLocation = myCursor.get_c_location();
-				//wcout << "CPL" << currentPieceLocation << endl;
-				//wcout << "NPL" << nextPieceLocation << endl;
+				//vector <bool> test(map.at(currPieceLoc)->move(map, currPieceLoc));
 				pressed = true;
-				if (nextPieceLocation != currentPieceLocation) {
- 					map.at(nextPieceLocation) = map.at(currentPieceLocation);
-					map.at(currentPieceLocation).pieceInt = 0;
+				if (currPieceLoc != nextPieceLocation) {
+					if (map.at(currPieceLoc)->move(map, currPieceLoc, nextPieceLocation).at(nextPieceLocation)) {
+						map.at(nextPieceLocation) = map.at(currPieceLoc);
+						map.at(currPieceLoc) = new Piece(0);
+					}
 				}
-				
 			}
-			
-		} while (!pressed);
+				
+		}while (!pressed);
 
 	}
 	void draw( ) {
@@ -135,11 +141,11 @@ public:
 				for (int colIndex = start; colIndex < (vectorX + start); colIndex++) {
 					if (colIndex % 2 == 0) {
 						SetConsoleTextAttribute(console_color, WHITE);
-						wcout  << map.at(index).getFigure(index) << ' ';
+						wcout  << map.at(index) -> getFigure(index) << ' ';
 					}
 					else {
 						SetConsoleTextAttribute(console_color, BLACK);
-						wcout  << map.at(index).getFigure(index) << ' ';
+						wcout  << map.at(index) -> getFigure(index) << ' ';
 					}
 					index++;
 				}
@@ -196,12 +202,19 @@ board::board(int sizeX, int sizeY) {
 	vectorX = sizeX;
 	vectorY = sizeY;
 	absoluteSize = sizeX * sizeY;
-	map.resize(absoluteSize, piece());
+	map.resize(absoluteSize/2 , new Piece());
 	ShowConsoleCursor(false);
-	map.insert(map.begin(), { piece(1, 1), piece(2, 1),piece(3, 1), piece(4, 1), piece(5, 1), piece(3, 1),piece(2, 1), piece(1, 1) });
-	map.insert(map.begin() + 8, { piece(6, 1), piece(6, 1),piece(6, 1), piece(6, 1), piece(6, 1), piece(6, 1),piece(6, 1), piece(6, 1) });
-	map.insert(map.begin() + 48, { piece(6, 1), piece(6, 1),piece(6, 1), piece(6, 1), piece(6, 1), piece(6, 1),piece(6, 1), piece(6, 1) });
-	map.insert(map.begin() + 56, { piece(1, 1), piece(2, 1),piece(3, 1), piece(4, 1), piece(5, 1), piece(3, 1),piece(2, 1), piece(1, 1) });
+	map.insert(map.begin(), { new Rook(1), new Knight(1), new Bishop(1), new King(1), new Queen( 1), new Bishop( 1), new Knight( 1), new Rook(1) });
+	//map.insert(map.begin() + 8, { new Pawn(1), new Pawn(1), new Pawn( 1), new Pawn( 1), new Pawn( 1), new Pawn( 1), new Pawn( 1), new Pawn( 1) });
+	//map.insert(map.begin() + 48, { new Pawn(-1), new Pawn( -1),new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1) });
+	map.insert(map.begin() + 8, { new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0) });
+	map.insert(map.begin() + 48, { new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0) });
+	map.insert(map.begin() + 56, { new Piece(0), new Knight(-1), new Bishop(-1), new King(-1), new Queen(-1), new Bishop(-1), new Knight(-1), new Rook(-1)});
+
+ 
+ 	
+
+
 }
 
 #endif
