@@ -23,9 +23,9 @@ public:
 	int vectorX = 8;
 	vector <bool> possiblemoves;
 	virtual vector<bool> move(vector<Piece*>& map, int loc, int newloc) {
-			possiblemoves.clear();
-			possiblemoves.resize(64, false);
-				return possiblemoves;
+		possiblemoves.clear();
+		possiblemoves.resize(64, false);
+		return possiblemoves;
 	}
     char figure = ' ';
     bool color = true;
