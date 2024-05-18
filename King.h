@@ -9,7 +9,7 @@ private:
 	bool checkMate = false;
 
 public:
-	vector<bool> move(vector<Piece*>& map, int loc, int newloc) {
+	vector<bool> move(vector<Piece*>& map, int loc) {
 		possiblemoves.clear();
 		possiblemoves.resize(64, false);
 		return possiblemoves;

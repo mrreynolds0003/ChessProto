@@ -21,8 +21,10 @@ public:
 	int team;
 	int pieceInt = 0;
 	int vectorX = 8;
+	int index = 1;
+	bool flag = true;
 	vector <bool> possiblemoves;
-	virtual vector<bool> move(vector<Piece*>& map, int loc, int newloc) {
+	virtual vector<bool> move(vector<Piece*>& map, int loc) {
 		possiblemoves.clear();
 		possiblemoves.resize(64, false);
 		return possiblemoves;

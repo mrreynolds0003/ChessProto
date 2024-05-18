@@ -8,11 +8,10 @@ class Rook : public Piece {
 private:
 	bool moved = false;
 public:
-	vector<bool> move(vector<Piece*>& map, int loc, int newloc) {
+	vector<bool> move(vector<Piece*>& map, int loc) {
 		possiblemoves.clear();
 		possiblemoves.resize(64, false);
-		int index = 1;
-		bool flag = true;
+
 		int curRow = loc / vectorX;
 		int curCol = loc %  vectorX;
 		
@@ -89,6 +88,7 @@ public:
 			index++;
 		}
 		return possiblemoves;
+		// write to check <vector> all possible moves
 	}
 
 
