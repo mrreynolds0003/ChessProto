@@ -9,9 +9,46 @@ private:
 	bool checkMate = false;
 
 public:
-	vector<bool> move(vector<Piece*>& map, int loc, int newloc) {
+	vector<bool> move(vector<Piece*>& map, int loc) {
 		possiblemoves.clear();
 		possiblemoves.resize(64, false);
+		int curCol = loc % vectorX;
+		//{ loc - vectorX - 1, loc - vectorX, loc - vectorX + 1,
+		//  loc - 1,                          loc + 1 };
+		//  loc + vectorX - 1, loc + vectorX, loc + vectorX + 1,
+
+		if (loc > 7) { //checks up
+			if (map.at(loc - vectorX)->team != map.at(loc)->team) { //up
+				possiblemoves.at(loc - vectorX) = true;
+			}
+			if (curCol <= 6 && map.at(loc - vectorX + 1)->team != map.at(loc)->team) { //up right
+				possiblemoves.at(loc - vectorX + 1) = true;
+			}
+		}
+		if (curCol >= 1) { //checks left
+			if (map.at(loc - 1)->team != map.at(loc)->team) { //left
+				possiblemoves.at(loc - 1) = true;
+			}
+			if (loc > 8 && map.at(loc - vectorX - 1)->team != map.at(loc)->team) { //up left
+				possiblemoves.at(loc - vectorX - 1) = true;
+			}
+		}
+		if (curCol <=6) { //checks right
+			if (map.at(loc + 1)->team != map.at(loc)->team) { //right
+				possiblemoves.at(loc + 1) = true;
+			}
+			if (loc < 55 && map.at(loc + vectorX + 1)->team != map.at(loc)->team) { //down right
+				possiblemoves.at(loc + vectorX + 1) = true;
+			}
+		}
+		if (loc < 56) { //checks down
+			if (map.at(loc + vectorX)->team != map.at(loc)->team) { //down
+				possiblemoves.at(loc + vectorX) = true;
+			}
+			if (curCol >= 1 && map.at(loc + vectorX - 1)->team != map.at(loc)->team) { //down left
+				possiblemoves.at(loc + vectorX - 1) = true;
+			}
+		}
 		return possiblemoves;
 	}
 
