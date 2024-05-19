@@ -1,15 +1,15 @@
-
+﻿
 #ifndef ABOARD_H
 #define ABOARD_H
 using namespace std;
 
 #include <iostream>
+#include <random>
 #include <iomanip>
 #include <vector>
 #include <string>
 #include <sstream>
 #include <thread>
-#include <random>
 #include <mutex>
 #include <chrono>
 #include "windows.h"
@@ -21,12 +21,19 @@ using namespace std;
 #include "King.h"
 #include "Pawn.h"
 #include "Bishop.h"
-#include <random>
+
 /*
 todo:
 clean out unneeded code
 assemble basic constructors
 draw board with moving cursor
+
+wstring s = L"♕";
+		wchar_t t1 = L'\u2658';
+		wchar_t t2 = L'\u265B';
+		wstring t3 = L"\u265C";
+		wcout << L"♕" << endl << s << endl << t1 << endl << t2 << endl << t3 << endl << endl;
+
 */
 const int SIZEX = 8;
 const int SIZEY = 8;
@@ -155,8 +162,9 @@ public:
 			//flop start
 			start++;
 		}
-		
+		//wcout << L"♟" << endl;
 		secure.unlock();
+		
 	}
 
 	void c_update(int time) {

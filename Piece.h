@@ -29,12 +29,12 @@ public:
 		possiblemoves.resize(64, false);
 		return possiblemoves;
 	}
-    char figure = ' ';
+    wstring figure = L" ";
     bool color = true;
 	Piece(int);
 	Piece();
-    char getFigure(int loc) {
-		char temp = figure;
+    wstring getFigure(int loc) {
+		wstring temp = figure;
 			if (loc == get_c_location()) {
 				temp = cursor_update();
 			}

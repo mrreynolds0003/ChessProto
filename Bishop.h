@@ -1,4 +1,4 @@
-#ifndef BISHOP_H
+﻿#ifndef BISHOP_H
 #define BISHOP_H
 #include "Piece.h"
 class Bishop : public Piece {
@@ -10,7 +10,7 @@ public:
 		possiblemoves.resize(64, false);		
 		int curRow = loc / vectorX;
 		int curCol = loc % vectorX;
-
+		int index = 1;
 		while (flag && index < 8) {
 			if (curCol != 7 && (loc + (vectorX + 1) * index) < 64) { // move right and down
 				if (map.at(loc + (vectorX + 1) * index)->team == 0) {
@@ -98,11 +98,16 @@ public:
 		pieceInt = 3;
 		team = pieceTeam;
 		if (team == 1) {
-			figure = 'B';
+			figure = L'♗';
 		}
 		else {
-			figure = 'b';
+			figure = L'♝';
 		}
 	}
 };
+
+/*
+♔♖♕♘♗♙♚♛♜♝♞♟
+white
+*/
 #endif

@@ -1,4 +1,4 @@
-#ifndef PAWN_H
+﻿#ifndef PAWN_H
 #define PAWN_H
 #include "Piece.h"
 #include <iomanip>
@@ -39,11 +39,16 @@ public:
 		pieceInt = 6;
 		team = pieceTeam;
 		if (team == 1) {
-			figure = 'P';
+			figure = L'♙';
 		}
 		else {
-			figure = 'p';
+			figure = L'♟';
 		}
 	}
 };
+
+/*
+♔♖♕♘♗♙♚♛♜♝♞♟
+white
+*/
 #endif

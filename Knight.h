@@ -1,4 +1,4 @@
-#ifndef KNIGHT_H
+﻿#ifndef KNIGHT_H
 #define KNIGHT_H
 #include "Piece.h"
 #include <vector>
@@ -21,7 +21,7 @@ public:
 		
 		int curRow = loc / vectorX;
 		int curCol = loc % vectorX;
-
+		int index = 1;
 		/*TO DO KNIGHT MOVES
 		* 1. loc - (vectorX * 2) - 1	UUL
 		* 2. loc - vectorX - 2			ULL
@@ -88,12 +88,16 @@ public:
 		pieceInt = 2;
 		team = pieceTeam;
 		if (team == 1) {
-			figure = 'N';
+			figure = L'♘';
 		}
 		else {
-			figure = 'n';
+			figure = L'♞';
 		}
 	}
 };
 
+/*
+♔♖♕♘♗♙♚♛♜♝♞♟
+white
+*/
 #endif

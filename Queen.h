@@ -1,4 +1,4 @@
-#ifndef QUEEN_H
+﻿#ifndef QUEEN_H
 #define QUEEN_H
 #include "Piece.h"
 class Queen : public Piece {
@@ -10,7 +10,7 @@ public:
 		possiblemoves.resize(64, false);
 		int curRow = loc / vectorX;
 		int curCol = loc % vectorX;
-
+		int index = 1;
 		while (flag && index < 8) {
 			if ((loc + (vectorX)*index) < 64) { //move down
 				if (map.at(loc + (vectorX)*index)->team == 0) {
@@ -175,16 +175,19 @@ public:
 		pieceInt = 5;
 		team = pieceTeam;
 		if (team == 1) {
-			figure = 'Q';
+			figure = L'♕';
 		}
 		else {
-			figure = 'q';
+			figure = L'♛';
 		}
 	}
 }; 
 
 
 
-
+/*
+♔♖♕♘♗♙♚♛♜♝♞♟
+white
+*/
 
 #endif

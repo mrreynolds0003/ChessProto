@@ -1,4 +1,4 @@
-
+﻿
 #ifndef ROOK_H
 #define ROOK_H
 
@@ -14,7 +14,7 @@ public:
 
 		int curRow = loc / vectorX;
 		int curCol = loc %  vectorX;
-		
+		int index = 1;
 		while (flag && index < 8) {
 			if ((loc + (vectorX)*index) < 64) { //move down
 				if (map.at(loc + (vectorX)*index)->team == 0) {
@@ -97,14 +97,17 @@ public:
 		pieceInt = 1;
 		team = pieceTeam;
 		if (team == 1) {
-			figure = 'R';
+			figure = L'♖';
 		}
 		else {
-			figure = 'r';
+			figure = L'♜';
 		}
 	}
 	
 
-};
+};/*
+♔♖♕♘♗♙♚♛♜♝♞♟
+white 
+*/
 
 #endif

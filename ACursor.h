@@ -14,7 +14,7 @@ class cursor
 {
 private:
 	static int CURSOR_LOCATION;
-	vector <char> cursorPhase = { '/', '-', '\\', '|' };
+	vector <char> cursorPhase = { '/', '-', ' ', '|' };
 	static int shapelocation;
 
 public:
