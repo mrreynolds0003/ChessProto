@@ -1,34 +1,35 @@
-#pragma once
-
+﻿
 #ifndef ABOARD_H
 #define ABOARD_H
 using namespace std;
 
 #include <iostream>
+#include <random>
 #include <iomanip>
 #include <vector>
 #include <string>
 #include <sstream>
 #include <thread>
-#include <random>
 #include <mutex>
 #include <chrono>
 #include "windows.h"
 #include "ACursor.h"
 #include "Piece.h"
 #include "Rook.h"
-#include <random>
-/*
-todo:
-clean out unneeded code
-assemble basic constructors
-draw board with moving cursor
-*/
+#include "Queen.h"
+#include "Knight.h"
+#include "King.h"
+#include "Pawn.h"
+#include "Bishop.h"
+
+
 const int SIZEX = 8;
 const int SIZEY = 8;
-const int WHITE = 240;
-const int BLACK = 7;
-//extern vector <piece> map;
+const int WHITE_COLOR = 240;
+const int BLACK_COLOR = 7;
+const int BLACK_TEAM = -1;
+const int WHITE_TEAM = 1;
+
 class board {
 private:
 	int vectorX;
@@ -55,7 +56,12 @@ private:
 	}
 public:
 	bool game_over = false;
-	vector <piece> map;
+	bool turn = true;
+	int flip = -1;
+	//bool mate;
+	vector <Piece*> map;
+	vector <Piece*> futuremap;
+	vector<bool> kingVec;
 	cursor myCursor;
 	board(int sizeX, int sizeY);
 	void clock() {
@@ -71,30 +77,98 @@ public:
 		}
 
 	}
-	void SmalltoBig(int& x, int& y) {
-		x = 5 * x + 1;
-		y = 3 * y + 1;
+
+	vector<bool> checkVector(vector<Piece*>& map, bool turn) {
+		vector <bool> checkVec;
+		checkVec.clear();
+		checkVec.resize(64, false);
+
+		turn ? flip = BLACK_TEAM : flip = WHITE_TEAM;
+		// white team check vector (filled with black pieces)	
+		for (int pieceIndex = 0; pieceIndex < absoluteSize; pieceIndex++) {
+			if (map.at(pieceIndex)->team == flip) {
+				vector<bool> tempVec = map.at(pieceIndex)->move(map, pieceIndex);
+				for (int i = 0; i < absoluteSize; i++) {
+					if (tempVec.at(i) == true) {
+						checkVec.at(i) = true;
+					}
+				}
+			}
+		}
+		return checkVec;
+	}
+	bool nomoves() {
+		bool moves = true;
+		for (int i = 0; i < kingVec.size(); i++) {
+			if (kingVec.at(i) == true) {
+				moves = false;
+			}
+		}
+		return moves;
+	}
+	bool checkmate() {
+		if (kingcheck(map, turn) && nomoves()) {
+			game_over = true;
+		}
+		return game_over;
+	}
+	bool kingcheck(vector<Piece*>& map, bool turn) {
+		bool kingCheck = false;
+
+		turn ? flip = WHITE_TEAM : flip = BLACK_TEAM;
+		// white team check vector (filled with black pieces)	
+		for (int pieceIndex = 0; pieceIndex < absoluteSize; pieceIndex++) {
+			if (map.at(pieceIndex)->team == flip && map.at(pieceIndex)->pieceInt == 4) {
+				kingVec = map.at(pieceIndex)->move(map, pieceIndex); //king's possible moves
+				kingVec.at(pieceIndex) = true;
+
+				if (checkVector(map, turn).at(pieceIndex) == true && kingVec.at(pieceIndex)) {
+					kingCheck = true;
+					kingVec.at(pieceIndex) = false;
+
+				}
+			}
+		}
+		return kingCheck;
+	}
+	bool futurecheck(int currPieceLoc, int nextPieceLocation) {
+		futuremap = map;
+		bool proceed = true;
+
+		if (map.at(currPieceLoc)->team == WHITE_TEAM) { //white team
+			if (futuremap.at(currPieceLoc)->move(futuremap, currPieceLoc).at(nextPieceLocation)) {
+				futuremap.at(nextPieceLocation) = futuremap.at(currPieceLoc);
+				futuremap.at(currPieceLoc) = new Piece(0);
+
+			}
+		}
+
+		if (map.at(currPieceLoc)->team == BLACK_TEAM) {	///black team						
+			if (futuremap.at(currPieceLoc)->move(futuremap, currPieceLoc).at(nextPieceLocation)) {
+				futuremap.at(nextPieceLocation) = futuremap.at(currPieceLoc);
+				futuremap.at(currPieceLoc) = new Piece(0);
+			}
+		}
+
+		if (kingcheck(futuremap, turn)) {
+			proceed = false;
+		}
+
+		return proceed;
 
 	}
-	void oneDtotwoD(int pos, int &x, int &y) {
-		x = pos % vectorX;
-		y = pos / vectorX;
-	}
-	void identifyMoves(bool pressed) { 
-		//identify which was clicked map.at(cursorlocation)
-		// send the map to the piece class in question
-		// gets back a vector of possible moves
-		// restricts cursor to only move in indexes that align with the possible moves vector
-		// if space is pressed, if the cursor location has not changed, "let go" of the piece
-		//else, move the piece to new location
-		static int currentPieceLocation = myCursor.get_c_location();
+
+	void identifyMoves(bool pressed) {
+
+		int currPieceLoc = myCursor.get_c_location();
 		int nextPieceLocation;
-		//wcout << "CPL" << currentPieceLocation << endl;
+		
 
 		do {
 			//myBoard.draw();
-			this_thread::sleep_for(chrono::milliseconds(1));
-
+			this_thread::sleep_for(chrono::milliseconds(100));
+			checkVector(map, turn);
+			checkmate();
 			if (GetAsyncKeyState(VK_DOWN)) {
 				move_down();
 			}
@@ -110,47 +184,66 @@ public:
 				move_left();
 			}
 			else if (GetAsyncKeyState(VK_SPACE)) {
+
 				nextPieceLocation = myCursor.get_c_location();
-				//wcout << "CPL" << currentPieceLocation << endl;
-				//wcout << "NPL" << nextPieceLocation << endl;
+				//vector <bool> test(map.at(currPieceLoc)->move(map, currPieceLoc));
 				pressed = true;
-				if (nextPieceLocation != currentPieceLocation) {
- 					map.at(nextPieceLocation) = map.at(currentPieceLocation);
-					map.at(currentPieceLocation).pieceInt = 0;
+				if (currPieceLoc != nextPieceLocation || map.at(currPieceLoc)->team != 0) {
+
+					if (turn == true && map.at(currPieceLoc)->team == WHITE_TEAM) { ///white team
+						if (map.at(currPieceLoc)->move(map, currPieceLoc).at(nextPieceLocation)) {
+							if (futurecheck(currPieceLoc, nextPieceLocation) == true) {
+								map.at(nextPieceLocation) = map.at(currPieceLoc);
+								map.at(currPieceLoc) = new Piece(0);
+								turn = false;
+							}
+						}
+					}
+					if (turn == false && map.at(currPieceLoc)->team == BLACK_TEAM) {	///black team						
+						if (map.at(currPieceLoc)->move(map, currPieceLoc).at(nextPieceLocation)) {
+							if (futurecheck(currPieceLoc, nextPieceLocation)) {
+								map.at(nextPieceLocation) = map.at(currPieceLoc);
+								map.at(currPieceLoc) = new Piece(0);
+								turn = true;
+							}
+						}
+					}
 				}
-				
 			}
-			
+
 		} while (!pressed);
 
 	}
-	void draw( ) {
+
+	void draw() {
 		secure.lock();
 		gotoxy(0, 0);
 		int start = 0;
 		int index = 0;
 		for (int rowIndex = 0; rowIndex < vectorY; rowIndex++) {
-			//first row type even, start at 0
-			//for (int temp = 0; temp < 3; temp++) {
-				for (int colIndex = start; colIndex < (vectorX + start); colIndex++) {
-					if (colIndex % 2 == 0) {
-						SetConsoleTextAttribute(console_color, WHITE);
-						wcout  << map.at(index).getFigure(index) << ' ';
-					}
-					else {
-						SetConsoleTextAttribute(console_color, BLACK);
-						wcout  << map.at(index).getFigure(index) << ' ';
-					}
-					index++;
+			for (int colIndex = start; colIndex < (vectorX + start); colIndex++) {
+				if (colIndex % 2 == 0) {
+					SetConsoleTextAttribute(console_color, WHITE_COLOR);
+					wcout << map.at(index)->getFigure(index) << ' ';
 				}
-			    SetConsoleTextAttribute(console_color, BLACK);
-				wcout << endl;
+				else {
+					SetConsoleTextAttribute(console_color, BLACK_COLOR);
+					wcout << map.at(index)->getFigure(index) << ' ';
+				}
+				index++;
+			}
+			SetConsoleTextAttribute(console_color, BLACK_COLOR);
+			wcout << endl;
 			//}
 			//flop start
 			start++;
 		}
-		
+		if (turn == 1) wcout << "white turn";
+		if (turn == 0) wcout << "black turn";
+		if (game_over) wcout << "Checkmate!";
+
 		secure.unlock();
+
 	}
 
 	void c_update(int time) {
@@ -160,7 +253,7 @@ public:
 			draw();
 		}
 	}
-		
+
 	void move_down() {
 		secure.lock();
 		if (!(myCursor.get_c_location() >= absoluteSize - 1) && !(myCursor.get_c_location() + vectorX >= absoluteSize)) {
@@ -196,12 +289,15 @@ board::board(int sizeX, int sizeY) {
 	vectorX = sizeX;
 	vectorY = sizeY;
 	absoluteSize = sizeX * sizeY;
-	map.resize(absoluteSize, piece());
+	map.resize(absoluteSize / 2, new Piece());
 	ShowConsoleCursor(false);
-	map.insert(map.begin(), { piece(1, 1), piece(2, 1),piece(3, 1), piece(4, 1), piece(5, 1), piece(3, 1),piece(2, 1), piece(1, 1) });
-	map.insert(map.begin() + 8, { piece(6, 1), piece(6, 1),piece(6, 1), piece(6, 1), piece(6, 1), piece(6, 1),piece(6, 1), piece(6, 1) });
-	map.insert(map.begin() + 48, { piece(6, 1), piece(6, 1),piece(6, 1), piece(6, 1), piece(6, 1), piece(6, 1),piece(6, 1), piece(6, 1) });
-	map.insert(map.begin() + 56, { piece(1, 1), piece(2, 1),piece(3, 1), piece(4, 1), piece(5, 1), piece(3, 1),piece(2, 1), piece(1, 1) });
+	map.insert(map.begin(), { new Rook(1), new Knight(1), new Bishop(1), new King(1), new Queen(1), new Bishop(1), new Knight(1), new Rook(1) });
+	map.insert(map.begin() + 8, { new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1) });
+	map.insert(map.begin() + 48, { new Pawn(-1), new Pawn(-1),new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1) });
+	//map.insert(map.begin() + 8, { new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0) });
+	//map.insert(map.begin() + 48, { new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0) });
+	map.insert(map.begin() + 56, { new Rook(-1), new Knight(-1), new Bishop(-1), new King(-1), new Queen(-1), new Bishop(-1), new Knight(-1), new Rook(-1) });
+
 }
 
 #endif
