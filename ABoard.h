@@ -107,11 +107,12 @@ public:
 		return moves;
 	}
 	bool checkmate() {
-		if (kingcheck(map, turn) && nomoves()) {
+		kingcheck(map, turn);
+		if (!nomoves()) {
 			game_over = true;
 		}
 		return game_over;
-	}
+	}// status(bool/vector?) for check to check for checkmate
 	bool kingcheck(vector<Piece*>& map, bool turn) {
 		bool kingCheck = false;
 
@@ -186,7 +187,6 @@ public:
 			else if (GetAsyncKeyState(VK_SPACE)) {
 
 				nextPieceLocation = myCursor.get_c_location();
-				//vector <bool> test(map.at(currPieceLoc)->move(map, currPieceLoc));
 				pressed = true;
 				if (currPieceLoc != nextPieceLocation || map.at(currPieceLoc)->team != 0) {
 
@@ -234,8 +234,7 @@ public:
 			}
 			SetConsoleTextAttribute(console_color, BLACK_COLOR);
 			wcout << endl;
-			//}
-			//flop start
+			
 			start++;
 		}
 		if (turn == 1) wcout << "white turn";
@@ -294,8 +293,8 @@ board::board(int sizeX, int sizeY) {
 	map.insert(map.begin(), { new Rook(1), new Knight(1), new Bishop(1), new King(1), new Queen(1), new Bishop(1), new Knight(1), new Rook(1) });
 	map.insert(map.begin() + 8, { new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1) });
 	map.insert(map.begin() + 48, { new Pawn(-1), new Pawn(-1),new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1) });
-	//map.insert(map.begin() + 8, { new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0) });
-	//map.insert(map.begin() + 48, { new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0) });
+	//map.insert(map.begin() + 8, { new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0) }); // tests without pawns
+	//map.insert(map.begin() + 48, { new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0) }); // tests without pawns
 	map.insert(map.begin() + 56, { new Rook(-1), new Knight(-1), new Bishop(-1), new King(-1), new Queen(-1), new Bishop(-1), new Knight(-1), new Rook(-1) });
 
 }
