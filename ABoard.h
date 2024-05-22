@@ -58,6 +58,8 @@ public:
 	bool game_over = false;
 	bool turn = true;
 	int flip = -1;
+	bool proceed = true;
+
 	//bool mate;
 	vector <Piece*> map;
 	vector <Piece*> futuremap;
@@ -108,7 +110,7 @@ public:
 	}
 	bool checkmate() {
 		kingcheck(map, turn);
-		if (!nomoves()) {
+		if (!nomoves() && !proceed) {
 			game_over = true;
 		}
 		return game_over;
@@ -134,7 +136,6 @@ public:
 	}
 	bool futurecheck(int currPieceLoc, int nextPieceLocation) {
 		futuremap = map;
-		bool proceed = true;
 
 		if (map.at(currPieceLoc)->team == WHITE_TEAM) { //white team
 			if (futuremap.at(currPieceLoc)->move(futuremap, currPieceLoc).at(nextPieceLocation)) {

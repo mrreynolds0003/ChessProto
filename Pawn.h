@@ -43,7 +43,7 @@ public:
 			figure = L'♙';
 		}
 		else {
-			figure = L'♟';
+			figure = L'p';
 		}
 	}
 };
