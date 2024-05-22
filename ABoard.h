@@ -57,6 +57,8 @@ private:
 public:
 	bool game_over = false;
 	bool turn = true;
+	bool proceed = true;
+
 	int flip = -1;
 	//bool mate;
 	vector <Piece*> map;
@@ -108,22 +110,25 @@ public:
 	}
 	bool checkmate() {
 		kingcheck(map, turn);
-		if (!nomoves()) {
+		if (!nomoves() && !proceed) {
 			game_over = true;
 		}
 		return game_over;
 	}// status(bool/vector?) for check to check for checkmate
 	bool kingcheck(vector<Piece*>& map, bool turn) {
 		bool kingCheck = false;
+		vector <bool> checkReturn;
 
-		turn ? flip = WHITE_TEAM : flip = BLACK_TEAM;
 		// white team check vector (filled with black pieces)	
+		checkReturn = checkVector(map, turn);
+		turn ? flip = WHITE_TEAM : flip = BLACK_TEAM;
+
 		for (int pieceIndex = 0; pieceIndex < absoluteSize; pieceIndex++) {
 			if (map.at(pieceIndex)->team == flip && map.at(pieceIndex)->pieceInt == 4) {
 				kingVec = map.at(pieceIndex)->move(map, pieceIndex); //king's possible moves
 				kingVec.at(pieceIndex) = true;
 
-				if (checkVector(map, turn).at(pieceIndex) == true && kingVec.at(pieceIndex)) {
+				if (checkReturn.at(pieceIndex) == true && kingVec.at(pieceIndex)) {
 					kingCheck = true;
 					kingVec.at(pieceIndex) = false;
 
@@ -134,21 +139,11 @@ public:
 	}
 	bool futurecheck(int currPieceLoc, int nextPieceLocation) {
 		futuremap = map;
-		bool proceed = true;
+		//turn ? flip = WHITE_TEAM : flip = BLACK_TEAM;
 
-		if (map.at(currPieceLoc)->team == WHITE_TEAM) { //white team
-			if (futuremap.at(currPieceLoc)->move(futuremap, currPieceLoc).at(nextPieceLocation)) {
-				futuremap.at(nextPieceLocation) = futuremap.at(currPieceLoc);
-				futuremap.at(currPieceLoc) = new Piece(0);
-
-			}
-		}
-
-		if (map.at(currPieceLoc)->team == BLACK_TEAM) {	///black team						
-			if (futuremap.at(currPieceLoc)->move(futuremap, currPieceLoc).at(nextPieceLocation)) {
-				futuremap.at(nextPieceLocation) = futuremap.at(currPieceLoc);
-				futuremap.at(currPieceLoc) = new Piece(0);
-			}
+		if (futuremap.at(currPieceLoc)->move(futuremap, currPieceLoc).at(nextPieceLocation)) {
+			futuremap.at(nextPieceLocation) = futuremap.at(currPieceLoc);
+			futuremap.at(currPieceLoc) = new Piece(0);
 		}
 
 		if (kingcheck(futuremap, turn)) {
@@ -163,13 +158,13 @@ public:
 
 		int currPieceLoc = myCursor.get_c_location();
 		int nextPieceLocation;
-		
+
 
 		do {
 			//myBoard.draw();
 			this_thread::sleep_for(chrono::milliseconds(100));
-			checkVector(map, turn);
-			checkmate();
+			//checkVector(map, turn);
+			//checkmate();
 			if (GetAsyncKeyState(VK_DOWN)) {
 				move_down();
 			}
@@ -234,7 +229,7 @@ public:
 			}
 			SetConsoleTextAttribute(console_color, BLACK_COLOR);
 			wcout << endl;
-			
+
 			start++;
 		}
 		if (turn == 1) wcout << "white turn";
@@ -291,10 +286,10 @@ board::board(int sizeX, int sizeY) {
 	map.resize(absoluteSize / 2, new Piece());
 	ShowConsoleCursor(false);
 	map.insert(map.begin(), { new Rook(1), new Knight(1), new Bishop(1), new King(1), new Queen(1), new Bishop(1), new Knight(1), new Rook(1) });
-	map.insert(map.begin() + 8, { new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1) });
-	map.insert(map.begin() + 48, { new Pawn(-1), new Pawn(-1),new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1) });
-	//map.insert(map.begin() + 8, { new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0) }); // tests without pawns
-	//map.insert(map.begin() + 48, { new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0) }); // tests without pawns
+	//map.insert(map.begin() + 8, { new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1) });
+	//map.insert(map.begin() + 48, { new Pawn(-1), new Pawn(-1),new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1) });
+	map.insert(map.begin() + 8, { new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0) }); // tests without pawns
+	map.insert(map.begin() + 48, { new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0), new Piece(0) }); // tests without pawns
 	map.insert(map.begin() + 56, { new Rook(-1), new Knight(-1), new Bishop(-1), new King(-1), new Queen(-1), new Bishop(-1), new Knight(-1), new Rook(-1) });
 
 }

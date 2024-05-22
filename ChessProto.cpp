@@ -8,7 +8,7 @@
 using namespace std;
 int main()
 {	
-	int time = 100;
+	int time = 10;
 	_setmode(_fileno(stdout), _O_U16TEXT);
 	bool game_running = true;
 	board myBoard(SIZEX, SIZEY);
@@ -19,7 +19,7 @@ int main()
 	
 	do {
 		myBoard.draw();
-		system("pause>nul");  //wait for key
+		//system("pause>nul");  //wait for key
 		this_thread::sleep_for(chrono::milliseconds(100));
 
 		if (GetAsyncKeyState(VK_DOWN)) {
