@@ -1,7 +1,8 @@
-#ifndef KING_H
+﻿#ifndef KING_H
 #define KING_H
-#include "Piece.h"
 
+#include "Piece.h"
+#include "Windows.h"
 class King : public Piece {
 private:
 
@@ -13,9 +14,6 @@ public:
 		possiblemoves.clear();
 		possiblemoves.resize(64, false);
 		int curCol = loc % vectorX;
-		//{ loc - vectorX - 1, loc - vectorX, loc - vectorX + 1,
-		//  loc - 1,                          loc + 1 };
-		//  loc + vectorX - 1, loc + vectorX, loc + vectorX + 1,
 
 		if (loc > 7) { //checks up
 			if (map.at(loc - vectorX)->team != map.at(loc)->team) { //up
@@ -57,12 +55,13 @@ public:
 		pieceInt = 4;
 		team = pieceTeam;
 		if (team == 1) {
-			figure = 'K';
+			figure = L'♔';
 		}
 		else {
-			figure = 'k';
+			figure = L'♚';
 		}
 	}
 };
+
 
 #endif

@@ -5,34 +5,30 @@
 #include <vector>
 #include <string>
 
-
 using namespace std;
 
 class Piece : public cursor{
 private:
 	int location = 0;
-	
-	//string pieceName = " ";
-
-    //const char WHITE = 0xDB;
-    //const char BLACK = 0xFF;
 
 public:
 	int team;
 	int pieceInt = 0;
 	int vectorX = 8;
+	int index = 1;
+	bool flag = true;
 	vector <bool> possiblemoves;
-	virtual vector<bool> move(vector<Piece*>& map, int loc, int newloc) {
+	virtual vector<bool> move(vector<Piece*>& map, int loc) {
 		possiblemoves.clear();
 		possiblemoves.resize(64, false);
 		return possiblemoves;
 	}
-    char figure = ' ';
+    wstring figure = L" ";
     bool color = true;
 	Piece(int);
 	Piece();
-    char getFigure(int loc) {
-		char temp = figure;
+    wstring getFigure(int loc) {
+		wstring temp = figure;
 			if (loc == get_c_location()) {
 				temp = cursor_update();
 			}
