@@ -57,6 +57,8 @@ private:
 public:
 	bool game_over = false;
 	bool turn = true;
+	bool proceed = true;
+
 	int flip = -1;
 	//bool mate;
 	vector <Piece*> map;
@@ -78,10 +80,10 @@ public:
 
 	}
 
-	vector<bool> checkVector(vector<Piece*>& map, bool turn) {
-		vector <bool> checkVec;
-		checkVec.clear();
-		checkVec.resize(64, false);
+	vector<bool> allMovesVector(vector<Piece*>& map, bool turn) {
+		vector <bool> allMovesVect;
+		allMovesVect.clear();
+		allMovesVect.resize(64, false);
 
 		turn ? flip = BLACK_TEAM : flip = WHITE_TEAM;
 		// white team check vector (filled with black pieces)	
@@ -90,42 +92,107 @@ public:
 				vector<bool> tempVec = map.at(pieceIndex)->move(map, pieceIndex);
 				for (int i = 0; i < absoluteSize; i++) {
 					if (tempVec.at(i) == true) {
-						checkVec.at(i) = true;
+						allMovesVect.at(i) = true;
 					}
 				}
 			}
 		}
-		return checkVec;
+		return allMovesVect;
 	}
-	bool nomoves() {
-		bool moves = true;
-		for (int i = 0; i < kingVec.size(); i++) {
-			if (kingVec.at(i) == true) {
-				moves = false;
+	
+
+	bool checkmate(vector<Piece*> map, bool turn) {
+		bool nomoves = true;
+		int flip2 = 0;
+		turn ? flip2 = WHITE_TEAM : flip2 = BLACK_TEAM;
+		for (int i = 0; i < map.size(); i++) { // goes thru the map
+			if (map.at(i)->team == flip2) { // checks if the piece its at is the team who is moving
+				vector <bool> pieceMoveVector = map.at(i)->move(map, i);
+				for (int k = 0; k < pieceMoveVector.size(); k++) { //iterates thru the possiblemoves vector of that piece
+					if (pieceMoveVector.at(k) == true) {
+						if (futurecheck(i, map.at(i)->move(map, i).at(k))) {// checks if the king is still checked with the possible moves
+							nomoves = false;
+						}
+					}
+				}
 			}
 		}
-		return moves;
+		return nomoves;
 	}
-	bool checkmate() {
-		kingcheck(map, turn);
-		if (!nomoves()) {
-			game_over = true;
+	/*
+	check:
+		checks ONE instance that the player gives
+		checks that against all the possible moves of the ENEMY TEAM
+
+	checkmate:
+		checks ALL instances of the PLAYER'S team
+		checks that against all the possible moves of the enemy team
+	
+	
+	
+	*/
+
+
+	/*bool nomoves() {
+		// 
+		//its checkmate if( the king is incheck && there is no configuration of the board where he is not in check)
+
+		defintion of king in check:
+			the king's position is aligned with a true boolean in checkvector
+
+		def of no piece can bail him out:
+			no piece can make it so the king's position is not aligned with a true boolean in checkvector
+				how we do this:
+				bool mate = true;
+				for(int i =0; i < map){
+					if(map.at(i) -> team == the team  whos turn it is){
+						for(int k = 0; k < map.at(i) -> moves){
+							if(futuremap(location of map.at(i), map.at(i) -> moves.at(k))){
+							mate = false;
+							}
+							}
+						}
+					}
+
+		//
+		bool nomoves = true;
+		for (int i = 0; i < kingVec.size(); i++) {
+			if (kingVec.at(i) == true) {
+				nomoves = false;
+			}
 		}
-		return game_over;
-	}// status(bool/vector?) for check to check for checkmate
+		return nomoves;
+		
+	}*/
+	
+	/*bool checkmate(int currPieceLoc, int nextPieceLoc) {
+	
+		bool kingmate = false;
+		kingcheck(map, turn);
+		if (!nomoves() && !futurecheck(currPieceLoc, nextPieceLoc)) {
+			kingmate = true;
+		}
+		return kingmate;
+		
+	}*/
+	
+	// status(bool/vector?) for check to check for checkmate
 	bool kingcheck(vector<Piece*>& map, bool turn) {
 		bool kingCheck = false;
+		vector <bool> checkReturn;
 
-		turn ? flip = WHITE_TEAM : flip = BLACK_TEAM;
 		// white team check vector (filled with black pieces)	
+		checkReturn = allMovesVector(map, turn);
+		turn ? flip = WHITE_TEAM : flip = BLACK_TEAM;
+
 		for (int pieceIndex = 0; pieceIndex < absoluteSize; pieceIndex++) {
 			if (map.at(pieceIndex)->team == flip && map.at(pieceIndex)->pieceInt == 4) {
-				kingVec = map.at(pieceIndex)->move(map, pieceIndex); //king's possible moves
-				kingVec.at(pieceIndex) = true;
+				kingVec = map.at(pieceIndex)->move(map, pieceIndex);    //king's possible moves
+				kingVec.at(pieceIndex) = true;     // king's location
 
-				if (checkVector(map, turn).at(pieceIndex) == true && kingVec.at(pieceIndex)) {
+				if (checkReturn.at(pieceIndex) == true && kingVec.at(pieceIndex)) {
 					kingCheck = true;
-					kingVec.at(pieceIndex) = false;
+					//kingVec.at(pieceIndex) = true;
 
 				}
 			}
@@ -134,22 +201,13 @@ public:
 	}
 	bool futurecheck(int currPieceLoc, int nextPieceLocation) {
 		futuremap = map;
-		bool proceed = true;
+		proceed = true;
+		//turn ? flip = WHITE_TEAM : flip = BLACK_TEAM;
 
-		if (map.at(currPieceLoc)->team == WHITE_TEAM) { //white team
-			if (futuremap.at(currPieceLoc)->move(futuremap, currPieceLoc).at(nextPieceLocation)) {
-				futuremap.at(nextPieceLocation) = futuremap.at(currPieceLoc);
-				futuremap.at(currPieceLoc) = new Piece(0);
-
-			}
-		}
-
-		if (map.at(currPieceLoc)->team == BLACK_TEAM) {	///black team						
-			if (futuremap.at(currPieceLoc)->move(futuremap, currPieceLoc).at(nextPieceLocation)) {
-				futuremap.at(nextPieceLocation) = futuremap.at(currPieceLoc);
-				futuremap.at(currPieceLoc) = new Piece(0);
-			}
-		}
+		//if (futuremap.at(currPieceLoc)->move(futuremap, currPieceLoc).at(nextPieceLocation)) {
+			futuremap.at(nextPieceLocation) = futuremap.at(currPieceLoc);
+			futuremap.at(currPieceLoc) = new Piece(0);
+		//}
 
 		if (kingcheck(futuremap, turn)) {
 			proceed = false;
@@ -163,13 +221,13 @@ public:
 
 		int currPieceLoc = myCursor.get_c_location();
 		int nextPieceLocation;
-		
+
 
 		do {
 			//myBoard.draw();
 			this_thread::sleep_for(chrono::milliseconds(100));
-			checkVector(map, turn);
-			checkmate();
+			//checkVector(map, turn);
+			
 			if (GetAsyncKeyState(VK_DOWN)) {
 				move_down();
 			}
@@ -185,14 +243,13 @@ public:
 				move_left();
 			}
 			else if (GetAsyncKeyState(VK_SPACE)) {
-
 				nextPieceLocation = myCursor.get_c_location();
 				pressed = true;
+				Piece* tempPiece = map.at(nextPieceLocation);
 				if (currPieceLoc != nextPieceLocation || map.at(currPieceLoc)->team != 0) {
-
 					if (turn == true && map.at(currPieceLoc)->team == WHITE_TEAM) { ///white team
 						if (map.at(currPieceLoc)->move(map, currPieceLoc).at(nextPieceLocation)) {
-							if (futurecheck(currPieceLoc, nextPieceLocation) == true) {
+							if (futurecheck(currPieceLoc, nextPieceLocation)) {
 								map.at(nextPieceLocation) = map.at(currPieceLoc);
 								map.at(currPieceLoc) = new Piece(0);
 								turn = false;
@@ -204,15 +261,24 @@ public:
 							if (futurecheck(currPieceLoc, nextPieceLocation)) {
 								map.at(nextPieceLocation) = map.at(currPieceLoc);
 								map.at(currPieceLoc) = new Piece(0);
+
+								
+								
+								
 								turn = true;
 							}
 						}
 					}
 				}
+				
 			}
 
 		} while (!pressed);
 
+		//if (checkmate(map, turn)) {
+		//	wcout << "game over" << endl;
+		//	game_over = true;
+		//}
 	}
 
 	void draw() {
@@ -234,11 +300,11 @@ public:
 			}
 			SetConsoleTextAttribute(console_color, BLACK_COLOR);
 			wcout << endl;
-			
+
 			start++;
 		}
-		if (turn == 1) wcout << "white turn";
-		if (turn == 0) wcout << "black turn";
+		if (turn == 1) wcout << "white turn" << endl;
+		if (turn == 0) wcout << "black turn" << endl;
 		if (game_over) wcout << "Checkmate!";
 
 		secure.unlock();

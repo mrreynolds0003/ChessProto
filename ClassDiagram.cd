@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Bishop">
+    <Position X="0.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Bishop.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="board">
+    <Position X="14.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAcIAAAAQEAAIAgRYQBAAGAAQAEIAAYIBCACAAAAs=</HashCode>
+      <FileName>ABoard.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cursor">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAECCCAAAAQAAAA=</HashCode>
+      <FileName>ACursor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rook">
+    <Position X="2.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAEAAAAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>Rook.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="King">
+    <Position X="7.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAoAACAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>King.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Knight">
+    <Position X="9.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Knight.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pawn">
+    <Position X="5.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgACAAAAAAAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>Pawn.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Piece">
+    <Position X="6" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACEAIAAAAAHAAAQAACAABIAIAABAAA=</HashCode>
+      <FileName>Piece.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Queen">
+    <Position X="11.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Queen.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

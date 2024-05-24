@@ -11,6 +11,7 @@ public:
 		int curRow = loc / vectorX;
 		int curCol = loc % vectorX;
 		int index = 1;
+		flag = true;
 		while (flag && index < 8) {
 			if ((loc + (vectorX)*index) < 64) { //move down
 				if (map.at(loc + (vectorX)*index)->team == 0) {
