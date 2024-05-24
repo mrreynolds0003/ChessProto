@@ -8,14 +8,17 @@
 #include <random>
 #include <mutex>
 #include "windows.h"
-
 using namespace std;
 
 class cursor
-{ //{L'\u25b5', L'\u25b9', L'\u25bf', L'\u25c3'};
+{	
+	// Option 1 { L'\u25ba', L'\u25bb' };
+	// Option 2 {L'\u25b5', L'\u25b9', L'\u25bf', L'\u25c3' }; martin likes
+	// Option 3{ L'\u25e2', L'\u25e3', L'\u25e4', L'\u25e5' };
+	// Option 4 { L'\u25b5', L'\u25b9', L'\u25bf', L'\u25c3' };
 private:
 	static int CURSOR_LOCATION;
-	vector <wchar_t> cursorPhase = {L'\u25b4', L'\u25b8', L'\u25be', L'\u25c2'};
+	vector <wchar_t> cursorPhase = { L'\u25b4', L'\u25b8', L'\u25be', L'\u25c2' };
 	static int shapelocation;
 
 public:
