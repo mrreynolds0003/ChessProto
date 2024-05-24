@@ -16,7 +16,7 @@ public:
 		if (loc > 7 && loc < 56) {
 			if (abs(map.at(loc + ((vectorX)*team))->team) == 0) {
 				possiblemoves.at(loc + ((vectorX)*team)) = true;			// verifies nothing is there
-				if (curRow == 1 || curRow == 6) {							// verifies piece hasnt moved for this entry loop 
+				if ((curRow == 1  && team == 1)|| (curRow == 6 && team == -1)) {							// verifies piece hasnt moved for this entry loop 
 					if (!(possiblemoves.at(loc + ((2 * vectorX) * team)) > 63 || possiblemoves.at(loc + ((2 * vectorX) * team)) < 0)) {
 
 						possiblemoves.at(loc + ((2 * vectorX) * team)) = true;  // move if not moved

@@ -12,7 +12,7 @@
 using namespace std;
 
 class cursor
-{ //{L'\u25b5', L'\u25b9', L'\u25bf', L'\u25c3'};
+{ 
 private:
 	static int CURSOR_LOCATION;
 	vector <wchar_t> cursorPhase = {L'\u25b4', L'\u25b8', L'\u25be', L'\u25c2'};

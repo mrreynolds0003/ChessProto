@@ -13,7 +13,7 @@ public:
 		possiblemoves.resize(64, false);
 
 		int curRow = loc / vectorX;
-		int curCol = loc %  vectorX;
+		int curCol = loc % vectorX;
 		int index = 1;
 		while (flag && index < 8) {
 			if ((loc + (vectorX)*index) < 64) { //move down
@@ -33,9 +33,9 @@ public:
 		}
 		index = 1;
 		flag = true;
- 		while (flag && index < 8) {
+		while (flag && index < 8) {
 			if ((loc - (vectorX)*index) > -1) { //move up
- 				if (map.at(loc - (vectorX)*index)->team == 0) {
+				if (map.at(loc - (vectorX)*index)->team == 0) {
 					possiblemoves.at(loc - ((vectorX)*index)) = true;
 				}
 				else if (map.at(loc - ((vectorX)*index))->team != map.at(loc)->team) {
@@ -48,12 +48,12 @@ public:
 			}
 			index++;
 		}
- 		index = 1;
+		index = 1;
 		flag = true;
 		while (flag && index < 8) {
- 			if (curCol != 7) { // move right
+			if (curCol != 7) { // move right
 				if (map.at(loc + index)->team == 0) {
- 					possiblemoves.at(loc + index) = true;
+					possiblemoves.at(loc + index) = true;
 				}
 				else if (map.at(loc + index)->team != map.at(loc)->team) {
 					possiblemoves.at(loc + index) = true;
@@ -64,14 +64,14 @@ public:
 				}
 				curCol++;
 			}
-			
+
 			index++;
 		}
 		curCol = loc % vectorX;
 		index = 1;
 		flag = true;
 		while (flag && index < 8) {
-		 	if (curCol != 0) { // move left
+			if (curCol != 0) { // move left
 				if (map.at(loc - index)->team == 0) {
 					possiblemoves.at(loc - index) = true;
 				}
@@ -84,12 +84,11 @@ public:
 				}
 				curCol--;
 			}
-			
+
 			index++;
 		}
 		return possiblemoves;
 	}
-
 
 	Rook(int pieceTeam) {
 		possiblemoves.resize(64, false);
@@ -102,11 +101,6 @@ public:
 			figure = L'♜';
 		}
 	}
-	
 
-};/*
-♔♖♕♘♗♙♚♛♜♝♞♟
-white 
-*/
-
+};
 #endif
