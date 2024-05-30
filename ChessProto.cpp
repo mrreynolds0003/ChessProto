@@ -6,6 +6,7 @@
 #include "Piece.h"
 #include "ACursor.h"
 using namespace std;
+
 int main()
 {	
 	int time = 100;
@@ -13,9 +14,6 @@ int main()
 	bool game_running = true;
 	board myBoard(SIZEX, SIZEY);
 	thread thread_obj(&board::c_update, &myBoard, time);  //thread for cursor update
-	thread clock(&board::clock, &myBoard);
-
-	//vector <string> scoreFile = readFile("HighScoresDB.txt");
 	
 	do {
 		myBoard.draw();
@@ -37,23 +35,18 @@ int main()
 			myBoard.move_left();
 		}
 		else if (GetAsyncKeyState(VK_SPACE)) { 
-			bool pressed = false;
-			
+			bool pressed = false;			
 			myBoard.identifyMoves(pressed);// location
 		}
-		else if (GetAsyncKeyState(0x4D)) {
-			//Forfeit game
 
-		}
 		if (GetAsyncKeyState(VK_ESCAPE)) {
 			game_running = false;
-			myBoard.game_over = true;
+ 			myBoard.game_over = true;
  		};
 
 	} while (game_running && !myBoard.game_over);
 	
-	myBoard.clock();
 	myBoard.draw();
-	clock.join();
 	thread_obj.join();
+	return 0;
 }
