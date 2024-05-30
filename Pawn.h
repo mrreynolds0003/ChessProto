@@ -63,7 +63,6 @@ public:
                 captureMoves.at(captureRight) = true;
             }
         }
-
         return captureMoves;
     }
 

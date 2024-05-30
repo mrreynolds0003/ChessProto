@@ -35,7 +35,6 @@ private:
 	int vectorY;
 	int absoluteSize = vectorX * vectorY;
 	mutex secure;
-	int timer = 0;
 
 	void ShowConsoleCursor(bool showFlag)
 	{
@@ -52,11 +51,11 @@ private:
 		xy.Y = y;
 		return SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), xy);
 	}
+
 public:
 	bool game_over = false;
 	bool turn = true;
 	bool proceed = true;
-
 	int flip = -1;
 
 	vector <Piece*> map;
@@ -103,7 +102,7 @@ public:
 					else {
 						possibleMoves = map.at(i)->move(map, i);
 					}
-					if (possibleMoves.at(j)) {
+					if (possibleMoves.at(i)) {
 						// If a move is legal and doesn't result in check, it's not checkmate
 						if (futureCheck(i, j)) {
 							return false;
@@ -130,7 +129,6 @@ public:
 
 				if (checkReturn.at(pieceIndex) == true && kingVec.at(pieceIndex)) {
 					inCheck = true;
-
 				}
 			}
 		}
@@ -202,13 +200,8 @@ public:
 						}
 					}
 				}
-
-
 			}
-
 		} while (!pressed);
-
-
 	}
 
 	void draw() {
@@ -230,22 +223,20 @@ public:
 			}
 			SetConsoleTextAttribute(console_color, 7);
 			wcout << endl;
-
 			start++;
 		}
-		if (turn == 1) wcout << "white turn" << endl;
-		if (turn == 0) wcout << "black turn" << endl;
+		
+		if (turn == 1) wcout << "White turn" << endl;
+		if (turn == 0) wcout << "Black turn" << endl;
 		if (game_over) wcout << "Checkmate!" << endl;
+		else if (kingInCheck(map, turn)) wcout << "Check" << endl;
 		//wcout << "CurrPieceLoc " << myCursor.get_c_location() << endl;
 		
-
 		secure.unlock();
-
 	}
 
 	void c_update(int time) {
 		while (!game_over) {
-
 			this_thread::sleep_for(chrono::milliseconds(time));
 			draw();
 		}
@@ -271,7 +262,6 @@ public:
 			myCursor.set_c_location(myCursor.get_c_location() - 1);
 		}
 		secure.unlock();
-
 	}
 	void move_right() {
 		secure.lock();
